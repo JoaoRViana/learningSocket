@@ -4,7 +4,7 @@ import Room from './components/Room'
 
 function App() {
   return (
-    <div >
+    <div>
           <Routes>
             <Route exact path='/' element= {<Home/>}/>
             <Route path='/:id' element={<Room />}></Route>
