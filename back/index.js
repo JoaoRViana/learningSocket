@@ -6,7 +6,7 @@ const cors = require('cors');
 
 app.use(cors());
 const server = http.createServer(app);
-
+const rooms = new Set();
 const io = new Server(server,{
     cors:{
         origin: "http://localhost:3000",
@@ -15,17 +15,21 @@ const io = new Server(server,{
 });
 
 io.on("connection",(socket)=>{
-    console.log(`User connect: ${socket.id}`)
-
     socket.on("sendMessage",(data)=>{
         socket.to(data.room).emit("receiveMessage",data)
     })
 
     socket.on("joinRoom",(data)=>{
         socket.join(data);
+        rooms.add(data);
+        io.emit("receiveRooms", Array.from(rooms));
     });
 
+    socket.on("getRooms", () => {
+        socket.emit("receiveRooms", Array.from(rooms));
+    });
 })
+
 
 server.listen(3001,()=>{
     console.log('RUNNING')
