@@ -18,8 +18,13 @@ io.on("connection",(socket)=>{
     console.log(`User connect: ${socket.id}`)
 
     socket.on("sendMessage",(data)=>{
-        socket.broadcast.emit("receiveMessage", data)
+        socket.to(data.room).emit("receiveMessage",data)
     })
+
+    socket.on("joinRoom",(data)=>{
+        socket.join(data);
+    });
+
 })
 
 server.listen(3001,()=>{
