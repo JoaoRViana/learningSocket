@@ -1,12 +1,14 @@
 import io from 'socket.io-client';
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 const socket = io.connect("http://localhost:3001");
 
 function Home() {
   const [room, setRoom] = useState("");
   const [allRooms, setAllRooms] = useState([]);
-
+  const [userName,setUserName] = useState('')
+  let history = useNavigate();
   const createRoom = () => {
     if (room !== '') {
       joinRoom(room)
@@ -14,9 +16,7 @@ function Home() {
   }
 
   const joinRoom = (roomName) => {
-    socket.emit("joinRoom", roomName);
-    socket.emit("receiveConnection",roomName)
-    window.location.replace(`/${roomName}`);
+    history(`/${roomName}`,{state:userName})
   }
 
   useEffect(() => {
@@ -25,12 +25,17 @@ function Home() {
     });
 
     socket.on("receiveRooms", (data) => {
-      setAllRooms(data);
+      const rooms = [];
+      data.forEach((e)=>{
+        rooms.push(e.room)
+      })
+      setAllRooms(rooms)
     });
   }, [socket]);
 
   return (
     <div className='block flex-wrap h-screen '>
+        <input placeholder='UserName' onChange={(e)=>{setUserName(e.target.value)}}></input>
         <div className='flex justify-center flex-wrap  p-5 w-[440px] h-60 mx-auto  items-center'>
             <input className='border-black border-2 w-[100px] h-10 mx-2 rounded-lg text-center bg-slate-500 text-black'
             onChange={(e) => {
