@@ -37,9 +37,7 @@ io.on("connection",(socket)=>{
     });
     socket.on("usersInRoom",(data)=>{
       const roomData = rooms.filter((e)=>(e.room ===data))[0];
-      const anotherUser = roomData.users.filter((e)=>(e.id !== socket.id))
-      console.log(anotherUser)
-      io.to(roomData.room).emit("receiveConnection",anotherUser)
+      io.to(roomData.room).emit("receiveConnection",roomData.users)
     })
     socket.on("getRooms", () => {
         io.emit("receiveRooms",rooms);

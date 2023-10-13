@@ -1,8 +1,6 @@
-import io from 'socket.io-client';
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
-
-const socket = io.connect("http://localhost:3001");
+import socket from "./socket";
 
 function Home() {
   const [room, setRoom] = useState("");
@@ -20,10 +18,7 @@ function Home() {
   }
 
   useEffect(() => {
-    socket.on("connect", () => {
-      socket.emit("getRooms");
-    });
-
+    socket.emit("getRooms");
     socket.on("receiveRooms", (data) => {
       const rooms = [];
       data.forEach((e)=>{
@@ -35,8 +30,10 @@ function Home() {
 
   return (
     <div className='block flex-wrap h-screen '>
-        <input placeholder='UserName' onChange={(e)=>{setUserName(e.target.value)}}></input>
-        <div className='flex justify-center flex-wrap  p-5 w-[440px] h-60 mx-auto  items-center'>
+        <div className='flex justify-center flex-wrap  p-5 w-[440px] my-2 mx-auto  items-center'>
+          <input placeholder='UserName' onChange={(e)=>{setUserName(e.target.value)}}></input>
+        </div>
+        <div className='flex justify-center flex-wrap  p-5 w-[440px] my-2 mx-auto  items-center'>
             <input className='border-black border-2 w-[100px] h-10 mx-2 rounded-lg text-center bg-slate-500 text-black'
             onChange={(e) => {
             setRoom(e.target.value);
