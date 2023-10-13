@@ -47,7 +47,7 @@ function Home() {
       }else if((choosedOption.current === 'scissors' && enemy.option === 'rock') ||
       (choosedOption.current === 'paper' && enemy.option === 'scissors') ||
       (choosedOption.current === 'rock' && enemy.option === 'paper')){
-        setResult('lose')
+        setResult('loose')
       }else{
         setResult('draw')
       }
@@ -59,7 +59,7 @@ function Home() {
   }, [socket]);
 
   return (
-    <div>
+    <div className="bg-slate-200 h-screen">
       <div className="mx-auto flex justify-center p-2 my-2">
         <button className="w-20 h-12 bg-slate-400 text-center rounded-md" onClick={()=>{
           window.location.replace('/');
@@ -68,8 +68,8 @@ function Home() {
       <div className="justify-center mx-auto flex my-2 p-5">
         <h3>Room: {id}</h3>
       </div>
-      <div className="flex justify-between h-[600px] ">
-        <div className="flex mx-5 justify- flex-wrap  bg-blue-400 h-[30%] w-[500px] p-5 border-gray border-2">
+      <div className="flex justify-between flex-wrap h-[400px] ">
+        <div className="flex mx-5 justify- flex-wrap  bg-blue-400 h-[100%] w-[500px] p-5 border-gray border-2">
           <h2 className="w-full text-center h-10 flex items-center justify-center">{userName}</h2>
         <div className="flex justify-around w-full">
           <button value={'rock'} className="border-2 border-slate-500 p-3 h-10 flex items-center bg-slate-600 disabled:opacity-75 w-20 justify-center" disabled={disableButtons} onClick={(e)=>{
@@ -87,23 +87,32 @@ function Home() {
           </div>
           
         </div>
-        <div className="flex mx-5 text-center bg-red-400 h-[30%] w-[500px] justify-center p-5 border-black border-2">
+        <div className="flex mx-5 text-center bg-red-400 h-[100%] w-[500px] justify-center p-5 border-black border-2">
           {anotherPlayer===""?<h2>Waiting for player...</h2>:
-          <div>
+          <div className="flex items-center justify-center w-full flex-wrap">
+            <div className="flex justify-center items-center w-full">
             <h2>{anotherPlayer}</h2>
-            {choosedOption.current !== '' && result !==''?<h2>{enemyOption}</h2>:<div>Waiting player Choose...</div>
-      }
+            </div>
+            <div className="flex justify-center items-center w-full text-xl text-red-800">
+            {choosedOption.current !== '' && result !==''?<h2>{enemyOption}</h2>:<div>Waiting player Choose...</div>}
+            </div>
+           
           </div>
           }
         </div>
       </div>
       {anotherPlayer !==''? <div>
       {result === ''?<div/>:
-      <div>
-        <h2>{result}</h2>
-        <button onClick={()=>{
+      <div className="flex justify-center flex-wrap mx-auto">
+        <div className="w-full justify-center flex p-2 my-2">
+          <h2 className="text-xl">{result}</h2>
+        </div>
+        <div className="w-full justify-center flex p-2 my-2">
+        <button className="bg-yellow-600 rounded-md w-20 h-12 text-center"
+         onClick={()=>{
           socket.emit('anotherMatch',id)
       }}>Play again</button>
+          </div>
       </div>
       }
       </div>:<div/>}

@@ -33,7 +33,7 @@ function Home() {
   }, [socket]);
 
   return (
-    <div className='block flex-wrap h-screen '>
+    <div className='block flex-wrap h-screen bg-slate-200' >
       <div className="bg-slate-600 w-[50%] mx-auto p-6 my-5 rounded-md">
         <div className='flex justify-center flex-wrap  p-5 w-[440px] my-2 mx-auto  items-center'>
             <input className=" bg-slate-300 text-center rounded-md" placeholder='UserName' onChange={(e)=>{
