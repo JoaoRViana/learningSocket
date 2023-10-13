@@ -87,7 +87,10 @@ io.on("connection",(socket)=>{
       if(everyoneChoose.length >1){
         io.to(data.room).emit('receiveOptions',roomData)
       } 
-    })  
+    })
+    socket.on('anotherMatch',(data)=>{
+      io.to(data).emit('playAgain',)
+    })
 })
 
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import socket from "./socket";
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
 
 
 function Home() {
   const choosedOption = useRef('');
-  const [enemyOption,setEnemyOption] = useState('')
+  const [enemyOption,setEnemyOption] = useState(false)
   const [disableButtons,setDisableButtons] = useState(false)
   const [userName,setUserName] = useState('')
   const [anotherPlayer,setAnotherPlayer] = useState("")
@@ -14,6 +14,7 @@ function Home() {
   const first = url.indexOf('/', 10);
   const id = url.slice(first + 1);
   const location = useLocation();
+  console.log(enemyOption)
   
   const playChoosed = (e)=>{
     choosedOption.current = e
@@ -50,6 +51,9 @@ function Home() {
       }else{
         setResult('draw')
       }
+    })
+    socket.on("playAgain",()=>{
+      window.location.reload()
     })
     socket.emit("getRooms");
   }, [socket]);
@@ -94,9 +98,12 @@ function Home() {
         </div>
       </div>
       {anotherPlayer !==''? <div>
-      {(choosedOption.current !== '') && (enemyOption ==='')?<div/>:
+      {result === ''?<div/>:
       <div>
         <h2>{result}</h2>
+        <button onClick={()=>{
+          socket.emit('anotherMatch',id)
+      }}>Play again</button>
       </div>
       }
       </div>:<div/>}
