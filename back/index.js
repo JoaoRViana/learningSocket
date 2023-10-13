@@ -59,6 +59,35 @@ io.on("connection",(socket)=>{
         }
       })
     })
+    socket.on('sendOption',(data)=>{
+      let roomData= [];
+      let index= '';
+      rooms.forEach((e,i)=>{
+        if(e.room === data.room){
+          roomData = e
+          index = i
+        }
+      })
+      let userIndex =''
+      let userOption = ''
+      roomData.users.forEach((e,i)=>{
+        if(e.id === data.id){
+          userIndex = i
+          userOption = {...e,option:data.option}
+        }
+      })
+      roomData.users[userIndex] = userOption;
+      rooms[index] = roomData;
+      let everyoneChoose = [];
+      roomData.users.forEach((e)=>{
+        if(Object.keys(e).length >2){
+          everyoneChoose.push(true)
+        }
+      })
+      if(everyoneChoose.length >1){
+        io.to(data.room).emit('receiveOptions',roomData)
+      } 
+    })  
 })
 
 
